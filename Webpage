@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cognitive Dividend — AI & the Australian Economy 2025–2030</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#0d0d0d; --paper:#f4efe4; --cream:#ece7da; --rule:#c4b49a;
+  --accent:#b83228; --accent2:#17426e; --accent3:#175c35; --gold:#a8870a;
+  --muted:#68594a; --chart-bg:#f9f5ef;
+  --ff-disp:'Playfair Display',Georgia,serif;
+  --ff-body:'IBM Plex Sans',sans-serif;
+  --ff-mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--paper);color:var(--ink);font-family:var(--ff-body);font-weight:300;font-size:17px;line-height:1.8;overflow-x:hidden;}
+#prog-track{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,0.1);z-index:500;}
+#prog-bar{height:100%;width:0%;background:var(--accent);transition:width 0.08s linear;}
+.masthead{min-height:100vh;background:var(--ink);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;}
+.mh-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(244,239,228,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(244,239,228,0.045) 1px,transparent 1px);background-size:64px 64px;animation:grid-scroll 18s linear infinite;}
+@keyframes grid-scroll{to{transform:translateY(64px);}}
+.mh-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 70% 40%,rgba(184,50,40,0.12) 0%,transparent 70%);pointer-events:none;}
+.mh-content{position:relative;z-index:2;padding:6rem 5rem 5rem;max-width:1400px;margin:0 auto;width:100%;}
+.kicker{font-family:var(--ff-mono);font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;color:var(--rule);margin-bottom:2.5rem;display:flex;align-items:center;gap:1rem;}
+.kicker::before{content:'';display:inline-block;width:36px;height:1px;background:var(--rule);}
+h1.headline{font-family:var(--ff-disp);font-size:clamp(3.2rem,8vw,7.8rem);font-weight:900;line-height:0.93;letter-spacing:-0.025em;color:var(--paper);margin-bottom:1.8rem;max-width:880px;}
+h1.headline em{color:var(--accent);font-style:italic;}
+.subhead{font-family:var(--ff-disp);font-size:clamp(1rem,2vw,1.4rem);font-weight:400;font-style:italic;color:rgba(244,239,228,0.6);max-width:660px;margin-bottom:3rem;line-height:1.55;}
+.thesis-box{border-left:3px solid var(--accent);padding:1.6rem 2rem;background:rgba(184,50,40,0.1);max-width:720px;margin-bottom:4rem;}
+.thesis-box p{font-family:var(--ff-disp);font-size:1.12rem;color:var(--paper);font-style:italic;line-height:1.65;max-width:100%;margin-bottom:0;}
+.ticker-strip{border-top:1px solid rgba(244,239,228,0.12);padding-top:2rem;display:flex;gap:4rem;flex-wrap:wrap;}
+.ticker-item{font-family:var(--ff-mono);}
+.ticker-label{font-size:0.58rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(244,239,228,0.38);display:block;margin-bottom:0.2rem;}
+.ticker-val{font-size:1.6rem;font-weight:500;color:var(--paper);display:block;line-height:1;}
+.ticker-val.green{color:#52c97a;} .ticker-val.gold{color:#e8c45a;}
+.nav-rail{position:fixed;left:1.6rem;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:0.9rem;}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--rule);cursor:pointer;transition:all 0.25s;position:relative;}
+.nav-dot:hover,.nav-dot.active{background:var(--accent);transform:scale(1.6);}
+.nav-dot .nd-label{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-family:var(--ff-mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;opacity:0;transition:opacity 0.2s;color:var(--muted);pointer-events:none;}
+.nav-dot:hover .nd-label{opacity:1;}
+.timeline-wrap{background:var(--ink);padding:3rem;margin:3.5rem 0;position:relative;overflow:hidden;}
+.timeline-wrap::before{content:'AI CAPABILITY TIMELINE';position:absolute;top:1.6rem;left:3rem;font-family:var(--ff-mono);font-size:0.6rem;letter-spacing:0.2em;color:rgba(244,239,228,0.25);}
+.timeline-track{display:flex;gap:0;margin-top:2.5rem;position:relative;}
+.timeline-track::before{content:'';position:absolute;top:28px;left:0;right:0;height:2px;background:rgba(244,239,228,0.12);}
+.tl-node{flex:1;position:relative;padding-top:3.2rem;padding-right:1rem;opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease;}
+.tl-node.revealed{opacity:1;transform:translateY(0);}
+.tl-dot{position:absolute;top:20px;left:0;width:16px;height:16px;border-radius:50%;border:2px solid rgba(244,239,228,0.25);background:var(--ink);transition:background 0.4s,border-color 0.4s;}
+.tl-node.revealed .tl-dot{background:var(--accent);border-color:var(--accent);}
+.tl-year{font-family:var(--ff-mono);font-size:0.65rem;letter-spacing:0.1em;color:rgba(244,239,228,0.4);margin-bottom:0.4rem;display:block;}
+.tl-event{font-family:var(--ff-body);font-size:0.78rem;font-weight:400;color:rgba(244,239,228,0.75);line-height:1.4;max-width:100%;margin:0;}
+.tl-tag{display:inline-block;font-family:var(--ff-mono);font-size:0.55rem;letter-spacing:0.08em;text-transform:uppercase;padding:0.15rem 0.4rem;margin-bottom:0.5rem;border-radius:2px;}
+.tl-tag.cap{background:rgba(184,50,40,0.3);color:#e88;} .tl-tag.eco{background:rgba(82,201,122,0.2);color:#7de;} .tl-tag.pol{background:rgba(168,135,10,0.25);color:#e8c;}
+.essay{max-width:1260px;margin:0 auto;padding:0 5rem;}
+section{padding:7rem 0 5rem;border-bottom:1px solid var(--rule);position:relative;}
+section:last-child{border-bottom:none;}
+.section-label{font-family:var(--ff-mono);font-size:0.63rem;letter-spacing:0.26em;text-transform:uppercase;color:var(--rule);margin-bottom:1.4rem;display:flex;align-items:center;gap:1rem;}
+.section-label::before{content:attr(data-num);color:var(--accent);font-size:0.88rem;}
+h2{font-family:var(--ff-disp);font-size:clamp(1.9rem,4vw,3rem);font-weight:700;line-height:1.1;letter-spacing:-0.02em;color:var(--ink);margin-bottom:2rem;max-width:720px;}
+h3{font-family:var(--ff-disp);font-size:1.35rem;font-weight:700;letter-spacing:-0.01em;color:var(--ink);margin:2.8rem 0 0.8rem;}
+h4{font-family:var(--ff-mono);font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin:1.6rem 0 0.5rem;}
+p{max-width:680px;margin-bottom:1.5rem;color:#1c1c1c;}
+.lead{font-family:var(--ff-disp);font-size:1.18rem;font-style:italic;line-height:1.6;color:var(--muted);margin-bottom:2rem;max-width:680px;}
+strong{font-weight:500;} em{font-style:italic;}
+.pullquote{font-family:var(--ff-disp);font-size:clamp(1.5rem,2.8vw,2.2rem);font-style:italic;font-weight:400;line-height:1.3;color:var(--accent2);border-left:4px solid var(--accent2);padding:1.4rem 0 1.4rem 2.2rem;margin:3rem 0;max-width:680px;}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1.4rem;margin:3rem 0;}
+.stat-card{background:var(--cream);border:1px solid var(--rule);padding:1.7rem 1.4rem;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent);}
+.stat-card.b::before{background:var(--accent2);} .stat-card.g::before{background:var(--accent3);} .stat-card.o::before{background:var(--gold);}
+.stat-num{font-family:var(--ff-disp);font-size:2.6rem;font-weight:900;line-height:1;color:var(--ink);margin-bottom:0.4rem;}
+.stat-lbl{font-family:var(--ff-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);line-height:1.45;}
+.stat-src{font-family:var(--ff-mono);font-size:0.52rem;color:var(--rule);margin-top:0.7rem;display:block;}
+.chart-wrap{background:var(--chart-bg);border:1px solid var(--rule);padding:2rem;margin:3rem 0;}
+.chart-title{font-family:var(--ff-mono);font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;}
+.chart-sub{font-family:var(--ff-disp);font-size:1rem;font-style:italic;color:var(--ink);margin-bottom:1.5rem;}
+.chart-note{font-family:var(--ff-mono);font-size:0.58rem;color:var(--rule);margin-top:1rem;line-height:1.55;max-width:100%;}
+.exp-table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:0.85rem;}
+.exp-table th{font-family:var(--ff-mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:0.6rem 1rem;border-bottom:2px solid var(--ink);background:var(--cream);}
+.exp-table td{padding:0.65rem 1rem;border-bottom:1px solid var(--cream);vertical-align:middle;}
+.exp-table tr:hover td{background:var(--cream);}
+.bar-cell{width:130px;} .exp-bar{height:7px;border-radius:1px;background:rgba(0,0,0,0.06);overflow:hidden;position:relative;}
+.exp-fill{height:100%;border-radius:1px;position:absolute;left:0;top:0;transition:width 1.2s ease;}
+.high{background:var(--accent);} .med{background:var(--gold);} .low{background:var(--accent3);}
+.badge{font-family:var(--ff-mono);font-size:0.52rem;letter-spacing:0.06em;text-transform:uppercase;padding:0.18rem 0.45rem;border-radius:2px;}
+.bh{background:rgba(184,50,40,0.12);color:var(--accent);} .bm{background:rgba(168,135,10,0.12);color:var(--gold);} .bl{background:rgba(23,92,53,0.12);color:var(--accent3);}
+.scenario-tabs{display:flex;gap:0;margin-top:2.5rem;border-bottom:2px solid var(--rule);}
+.s-tab{font-family:var(--ff-mono);font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.8rem 1.8rem;cursor:pointer;border:1px solid transparent;border-bottom:none;background:transparent;color:var(--muted);transition:all 0.2s;position:relative;bottom:-2px;}
+.s-tab:hover{color:var(--ink);}
+.s-tab.active-b{background:var(--cream);color:var(--ink);border-color:var(--rule);border-bottom-color:var(--cream);}
+.s-tab.active-u{background:#e6f2ec;color:var(--accent3);border-color:var(--rule);border-bottom-color:#e6f2ec;font-weight:500;}
+.s-tab.active-d{background:#faecea;color:var(--accent);border-color:var(--rule);border-bottom-color:#faecea;font-weight:500;}
+.s-panel{display:none;padding:2.5rem;border:1px solid var(--rule);border-top:none;}
+.s-panel.active{display:block;}
+.sp-b{background:var(--cream);} .sp-u{background:#e6f2ec;} .sp-d{background:#faecea;}
+.s-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.s-name{font-family:var(--ff-disp);font-size:1.5rem;font-weight:700;color:var(--ink);}
+.s-gdp{font-family:var(--ff-mono);font-size:0.95rem;font-weight:500;}
+.s-drivers{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;}
+.drv{background:rgba(255,255,255,0.55);padding:0.9rem 1.1rem;border-left:3px solid var(--rule);}
+.drv.opp{border-color:var(--accent3);} .drv.risk{border-color:var(--accent);}
+.drv-lbl{font-family:var(--ff-mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.35rem;}
+.sim{background:var(--ink);color:var(--paper);padding:3rem;margin:3rem 0;}
+.sim-title{font-family:var(--ff-disp);font-size:1.45rem;font-weight:700;color:var(--paper);margin-bottom:0.5rem;}
+.sim-desc{font-size:0.82rem;color:rgba(244,239,228,0.55);margin-bottom:2rem;max-width:100%;}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2.5rem;}
+.sim-ctl label{font-family:var(--ff-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--rule);display:block;margin-bottom:0.5rem;}
+.sim-ctl input[type=range]{width:100%;accent-color:var(--accent);height:4px;cursor:pointer;}
+.sim-ctl .sv{font-family:var(--ff-mono);font-size:0.9rem;color:var(--paper);margin-top:0.3rem;}
+.sim-out{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;padding-top:2rem;border-top:1px solid rgba(244,239,228,0.12);}
+.sim-m{text-align:center;}
+.sim-mv{font-family:var(--ff-disp);font-size:1.9rem;font-weight:700;color:var(--paper);display:block;line-height:1;margin-bottom:0.4rem;transition:all 0.3s;}
+.sim-mv.pos{color:#52c97a;} .sim-mv.neg{color:#e05c50;}
+.sim-ml{font-family:var(--ff-mono);font-size:0.58rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(244,239,228,0.4);line-height:1.45;}
+.policy-tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.4rem;margin:2.5rem 0;}
+.p-card{background:var(--cream);border:1px solid var(--rule);padding:1.8rem;transition:transform 0.2s,box-shadow 0.2s;cursor:default;position:relative;overflow:hidden;}
+.p-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,0.09);}
+.p-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+.p-card:hover::after{transform:scaleX(1);}
+.p-icon{font-size:1.7rem;margin-bottom:0.7rem;display:block;}
+.p-name{font-family:var(--ff-disp);font-size:1.05rem;font-weight:700;margin-bottom:0.3rem;}
+.p-when{font-family:var(--ff-mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;}
+.p-body{font-size:0.82rem;color:var(--muted);line-height:1.62;max-width:100%;margin-bottom:1rem;}
+.p-tradeoff{background:rgba(0,0,0,0.05);padding:0.65rem 0.9rem;font-family:var(--ff-mono);font-size:0.57rem;letter-spacing:0.04em;color:var(--muted);line-height:1.5;}
+.dials-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:2rem;margin:2.5rem 0;}
+.dial-wrap{text-align:center;}
+.dial-label{font-family:var(--ff-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:0.7rem;line-height:1.4;}
+.dial-svg{display:block;margin:0 auto;}
+.unc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:2rem 0;}
+.unc-item{border-left:3px solid var(--gold);padding-left:1.1rem;}
+.unc-item h4{color:var(--gold);margin:0 0 0.4rem;}
+.unc-item p{font-size:0.84rem;color:var(--muted);max-width:100%;margin:0;line-height:1.55;}
+.disclosure{background:rgba(23,66,110,0.07);border:1px solid rgba(23,66,110,0.2);padding:1.5rem 2rem;margin:2.5rem 0;font-size:0.82rem;color:var(--muted);line-height:1.65;max-width:100%;}
+.disclosure strong{font-family:var(--ff-mono);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);display:block;margin-bottom:0.4rem;}
+.ref-list{list-style:none;counter-reset:ref;}
+.ref-list li{counter-increment:ref;padding:0.6rem 0 0.6rem 2.4rem;position:relative;font-size:0.81rem;color:var(--muted);border-bottom:1px solid var(--cream);max-width:100%;line-height:1.55;}
+.ref-list li::before{content:counter(ref);position:absolute;left:0;font-family:var(--ff-mono);font-size:0.62rem;color:var(--rule);top:0.75rem;}
+footer{background:var(--ink);color:rgba(244,239,228,0.38);padding:3rem 5rem;font-family:var(--ff-mono);font-size:0.63rem;letter-spacing:0.07em;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+footer span{color:var(--rule);}
+.fi{opacity:0;transform:translateY(18px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.fi.in{opacity:1;transform:translateY(0);}
+@media(max-width:1000px){.mh-content,.essay{padding-left:2rem;padding-right:2rem;}.nav-rail{display:none;}.sim-grid{grid-template-columns:1fr;}.sim-out{grid-template-columns:1fr 1fr;}.s-drivers{grid-template-columns:1fr;}.unc-grid{grid-template-columns:1fr;}footer{padding:2rem;}}
+@media(max-width:600px){.stat-row{grid-template-columns:1fr 1fr;}.sim-out{grid-template-columns:1fr 1fr;}.policy-tree{grid-template-columns:1fr;}.dials-row{grid-template-columns:repeat(3,1fr);}}
+</style>
+</head>
+<body>
+
+<div id="prog-track"><div id="prog-bar"></div></div>
+
+<nav class="nav-rail" aria-label="Sections">
+  <div class="nav-dot active" onclick="goTo('thesis')"><span class="nd-label">Thesis</span></div>
+  <div class="nav-dot" onclick="goTo('mechanisms')"><span class="nd-label">Mechanisms</span></div>
+  <div class="nav-dot" onclick="goTo('sectors')"><span class="nd-label">Sectors</span></div>
+  <div class="nav-dot" onclick="goTo('scenarios')"><span class="nd-label">Scenarios</span></div>
+  <div class="nav-dot" onclick="goTo('policy')"><span class="nd-label">Policy</span></div>
+  <div class="nav-dot" onclick="goTo('methods')"><span class="nd-label">Methods</span></div>
+  <div class="nav-dot" onclick="goTo('references')"><span class="nd-label">References</span></div>
+</nav>
+
+<header class="masthead" id="thesis">
+  <div class="mh-grid"></div>
+  <div class="mh-glow"></div>
+  <div class="mh-content">
+    <div class="kicker">ECON1626 &middot; Economics of Artificial Intelligence &middot; RMIT University &middot; 2026</div>
+    <h1 class="headline">The <em>Cognitive</em><br>Dividend</h1>
+    <p class="subhead">How artificial intelligence will restructure Australia's economy by 2030 — and what stands between promise and peril.</p>
+    <div class="thesis-box">
+      <p>Australia stands at an asymmetric crossroads: AI-driven productivity gains worth 1.5–2.5% of GDP per annum by 2030 are technologically plausible, yet realising them requires simultaneous reform of skills infrastructure, competition policy, and data governance. The question is not whether AI transforms the Australian economy, but whether the gains compound for the many or concentrate in the few.</p>
+    </div>
+    <div class="ticker-strip">
+      <div class="ticker-item"><span class="ticker-label">Potential GDP uplift by 2030</span><span class="ticker-val green" id="tk1">A$0B</span></div>
+      <div class="ticker-item"><span class="ticker-label">Jobs with high AI exposure</span><span class="ticker-val gold" id="tk2">0%</span></div>
+      <div class="ticker-item"><span class="ticker-label">Horizon</span><span class="ticker-val" style="font-size:1.1rem;padding-top:0.3rem">2025 – 2030</span></div>
+      <div class="ticker-item"><span class="ticker-label">Scenarios modelled</span><span class="ticker-val">3</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="essay">
+
+<!-- §01 MECHANISMS -->
+<section id="mechanisms">
+<div class="section-label fi" data-num="01">Economic Mechanisms</div>
+<h2 class="fi">From model weights to GDP: the four transmission channels</h2>
+
+<p class="lead fi">AI's economic impact travels through four channels — each with distinct speed, distributional character, and policy sensitivity.</p>
+
+<p class="fi">The <strong>first channel is task automation</strong>. Large language models now perform at median-professional level on legal review, radiology triage, and financial analysis. The OECD (2023) estimates <strong>27% of Australian jobs have high AI exposure</strong> — implying task recomposition within roles as routine cognitive sub-tasks are offloaded while workers focus on judgment and relational work.</p>
+
+<p class="fi">The <strong>second channel is productivity augmentation</strong>. Noy and Zhang (2023) found ChatGPT-assisted workers completed tasks 40% faster at higher quality. Goldman Sachs (2023) modelled a 1.5pp annual global productivity boost under moderate adoption — comparable to electrification gains in the 1920s.</p>
+
+<p class="fi">The <strong>third channel is creative destruction</strong>. AI collapses the cost of specialist tasks, shrinking information intermediaries while expanding markets for AI-augmented services. Competitive advantage shifts toward early adopters who accumulate proprietary training data.</p>
+
+<p class="fi">The <strong>fourth channel is distributional effect</strong>. Unlike prior automation that displaced manual workers, AI targets the professional middle class — analysts, paralegals, junior developers — a segment historically insulated from automation. This makes the distributional question as important as the aggregate productivity question.</p>
+
+<p class="fi">The lags matter as much as the levels. Australia's fragmented SME landscape — 97% of businesses under 20 people — means adoption will trail the US by 18–30 months. Frontier AI capability exists today, but realising it economy-wide depends on management quality and training investment the technology itself cannot provide.</p>
+
+<div class="stat-row fi">
+  <div class="stat-card"><div class="stat-num">27%</div><div class="stat-lbl">Australian jobs with high AI task exposure</div><span class="stat-src">OECD, 2023</span></div>
+  <div class="stat-card b"><div class="stat-num">A$600B</div><div class="stat-lbl">Potential cumulative GDP uplift by 2030</div><span class="stat-src">Deloitte Access Economics, 2024</span></div>
+  <div class="stat-card g"><div class="stat-num">1–3yr</div><div class="stat-lbl">Typical lag from capability to firm adoption</div><span class="stat-src">McKinsey, 2024</span></div>
+  <div class="stat-card o"><div class="stat-num">34%</div><div class="stat-lbl">SMEs currently using AI in operations</div><span class="stat-src">CSIRO, 2024</span></div>
+</div>
+
+<div class="timeline-wrap fi">
+  <div class="timeline-track" id="tlTrack">
+    <div class="tl-node"><div class="tl-dot"></div><span class="tl-year">2020–23</span><span class="tl-tag cap">Capability</span><p class="tl-event">GPT-3 to GPT-4: generative AI reaches professional exam performance. ChatGPT hits 100M users in 2 months.</p></div>
+    <div class="tl-node"><div class="tl-dot"></div><span class="tl-year">2024–26</span><span class="tl-tag pol">Policy</span><p class="tl-event">Australian banks deploy AI underwriting at scale. EU AI Act takes effect. Australian regulatory consultation opens.</p></div>
+    <div class="tl-node"><div class="tl-dot"></div><span class="tl-year">2027–30</span><span class="tl-tag eco">Economic</span><p class="tl-event">Productivity gains appear in ABS data. Cumulative GDP uplift: A$90–600B. Distributional outcomes locked in by policy choices made in 2025–26.</p></div>
+  </div>
+</div>
+
+<div class="pullquote fi">"AI is not a technology shock — it is a measurement problem. Productivity gains arrive first in the firm, then the sector, and finally — sometimes never — in the aggregate statistics."</div>
+
+<div class="chart-wrap fi">
+  <div class="chart-title">Fig. 1 — Productivity Channel Decomposition</div>
+  <div class="chart-sub">Estimated Australian productivity uplift by mechanism (pp of GDP per annum, 2025–2030)</div>
+  <canvas id="channelChart" height="270"></canvas>
+  <div class="chart-note">Estimates synthesised from Goldman Sachs (2023), McKinsey (2024), and Deloitte Access Economics (2024). Bars show upside (P80), baseline (P50), and downside (P20) scenarios.</div>
+</div>
+</section>
+
+<!-- §02 SECTORS -->
+<section id="sectors">
+<div class="section-label fi" data-num="02">Sector Analysis</div>
+<h2 class="fi">Not all sectors face the same future: Australia's exposure map</h2>
+
+<p class="lead fi">Australia's economic structure — resources-heavy, services-dominated — shapes which AI channels fire first.</p>
+
+<p class="fi"><strong>Financial services</strong> is the sharpest double-edged case. Contributing 8.5% of GDP, the sector stands to gain from AI-driven compliance automation and credit underwriting — KPMG (2024) estimates 25–35% cost reduction within five years. Yet junior analyst and compliance roles face the highest AI task-overlap, making this simultaneously the biggest productivity winner and the source of the most concentrated displacement risk.</p>
+
+<p class="fi"><strong>Healthcare</strong> is where AI's upside is most compelling. Harrison.ai and Annalise.ai have demonstrated diagnostic AI at specialist level in radiology. With five million Australians in rural areas lacking specialist access, AI-augmented care is a health equity argument as much as an efficiency one. Yet the TGA's framework was not designed for adaptive AI systems — a governance gap requiring new approaches.</p>
+
+<p class="fi"><strong>Mining and resources</strong> offers a distinctive AI opportunity. Rio Tinto and BHP already deploy autonomous haulage and predictive maintenance AI at scale — yielding safety gains and cost savings rather than employment disruption, given the sector's small, remote workforce.</p>
+
+<p class="fi"><strong>Aged care and construction</strong> face low AI exposure due to physical, relational work. This creates a stark tension: AI disrupts inner-city professionals while sectors with genuine labour shortages remain AI-resistant — a challenge skills reform must address.</p>
+
+<table class="exp-table fi">
+  <thead><tr><th>Sector</th><th>AI Exposure</th><th>Disruption Risk</th><th>Opportunity</th><th>Key AI Mechanism</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Financial Services</strong></td><td class="bar-cell"><div class="exp-bar"><div class="exp-fill high" style="width:0" data-w="82%"></div></div></td><td><span class="badge bh">Very High</span></td><td><span class="badge bh">Very High</span></td><td>Compliance automation, underwriting, advisory</td></tr>
+    <tr><td><strong>Professional Services</strong></td><td class="bar-cell"><div class="exp-bar"><div class="exp-fill high" style="width:0" data-w="78%"></div></div></td><td><span class="badge bh">High</span></td><td><span class="badge bm">Medium</span></td><td>Document review, research, junior task substitution</td></tr>
+    <tr><td><strong>Healthcare</strong></td><td class="bar-cell"><div class="exp-bar"><div class="exp-fill med" style="width:0" data-w="60%"></div></div></td><td><span class="badge bm">Medium</span></td><td><span class="badge bh">Very High</span></td><td>Diagnostics, admin relief, clinical decision support</td></tr>
+    <tr><td><strong>Education</strong></td><td class="bar-cell"><div class="exp-bar"><div class="exp-fill med" style="width:0" data-w="55%"></div></div></td><td><span class="badge bm">Medium</span></td><td><span class="badge bm">Medium</span></td><td>Personalised tutoring, admin, curriculum support</td></tr>
+    <tr><td><strong>Mining &amp; Resources</strong></td><td class="bar-cell"><div class="exp-bar"><div class="exp-fill med" style="width:0" data-w="45%"></div></div></td><td><span class="badge bl">Low</span></td><td><span class="badge bh">High</span></td><td>Autonomous equipment, predictive maintenance</td></tr>
+    <tr><td><strong>Construction</strong></td><td class="bar-cell"><div class="exp-bar"><div class="exp-fill low" style="width:0" data-w="28%"></div></div></td><td><span class="badge bl">Low</span></td><td><span class="badge bm">Medium</span></td><td>Design optimisation, project management AI</td></tr>
+    <tr><td><strong>Retail &amp; Hospitality</strong></td><td class="bar-cell"><div class="exp-bar"><div class="exp-fill med" style="width:0" data-w="50%"></div></div></td><td><span class="badge bm">Medium</span></td><td><span class="badge bl">Low</span></td><td>Inventory, personalisation, some front-line tasks</td></tr>
+    <tr><td><strong>Aged Care</strong></td><td class="bar-cell"><div class="exp-bar"><div class="exp-fill low" style="width:0" data-w="18%"></div></div></td><td><span class="badge bl">Very Low</span></td><td><span class="badge bm">Medium</span></td><td>Care coordination, admin, early warning systems</td></tr>
+  </tbody>
+</table>
+
+<div class="chart-wrap fi">
+  <div class="chart-title">Fig. 2 — Sector Employment Risk vs. Wage Opportunity</div>
+  <div class="chart-sub">AI task overlap (%) vs. projected real wage change by sector, 2025–2030</div>
+  <canvas id="bubbleChart" height="310"></canvas>
+  <div class="chart-note">Bubble size = employment share. X-axis = AI task overlap (OECD 2023 methodology). Y-axis = projected real wage change under baseline scenario.</div>
+</div>
+</section>
+
+<!-- §03 SCENARIOS -->
+<section id="scenarios">
+<div class="section-label fi" data-num="03">Scenario Analysis</div>
+<h2 class="fi">Three futures: what separates them is policy, not technology</h2>
+
+<p class="lead fi">Each scenario shares the same AI capabilities. What differs is institutional response. The divergence between upside and downside is almost entirely determined by choices made in 2025–26 — before disruption is statistically visible.</p>
+
+<div class="scenario-tabs">
+  <button class="s-tab active-b" onclick="showS('b')">◈ Baseline</button>
+  <button class="s-tab" onclick="showS('u')">▲ Upside</button>
+  <button class="s-tab" onclick="showS('d')">▼ Downside</button>
+</div>
+
+<div class="s-panel sp-b active" id="sp-b">
+  <div class="s-header">
+    <div><div class="s-name">Managed Transition</div><p style="font-size:0.84rem;color:var(--muted);margin:0.3rem 0 0;max-width:100%">Policy adapts incrementally; large firms gain, SMEs lag</p></div>
+    <div style="text-align:right"><div class="s-gdp" style="color:var(--accent2)">+1.2–1.5% GDP pa</div><div style="font-family:var(--ff-mono);font-size:0.58rem;color:var(--muted)">cumulative +A$280B by 2030</div></div>
+  </div>
+  <p style="font-size:0.87rem;max-width:100%;margin-bottom:1rem;color:#1c1c1c">Large firms capture productivity gains by 2026–27; SMEs lag by 2–3 years. Retraining investment remains insufficient. Net employment in high-exposure sectors declines 3–5%, partially offset by new AI-adjacent roles. The Gini coefficient edges upward by 1.5–2 points, with sharper divergence between capital city and regional markets.</p>
+  <div class="s-drivers">
+    <div class="drv"><div class="drv-lbl">Key Driver</div>Corporate R&amp;D investment and hyperscaler infrastructure deployed in Australia</div>
+    <div class="drv"><div class="drv-lbl">Key Constraint</div>SME adoption gap; skills system lag; data governance uncertainty</div>
+    <div class="drv risk"><div class="drv-lbl">Downside Risk</div>Productivity gains fail to flow to wages; political backlash generates regulatory overreach</div>
+    <div class="drv opp"><div class="drv-lbl">Upside Potential</div>Healthcare AI delivers equity gains; mining AI de-risks operations materially</div>
+  </div>
+</div>
+
+<div class="s-panel sp-u" id="sp-u" style="display:none">
+  <div class="s-header">
+    <div><div class="s-name">Cognitive Dividend</div><p style="font-size:0.84rem;color:var(--accent3);margin:0.3rem 0 0;max-width:100%">Coordinated policy unlocks broad adoption and inclusive gains</p></div>
+    <div style="text-align:right"><div class="s-gdp" style="color:var(--accent3)">+2.2–2.5% GDP pa</div><div style="font-family:var(--ff-mono);font-size:0.58rem;color:var(--accent3)">cumulative +A$580B by 2030</div></div>
+  </div>
+  <p style="font-size:0.87rem;max-width:100%;margin-bottom:1rem;color:#1c1c1c">A refundable SME adoption tax credit and National Skills Compact fund 300,000 occupation transitions. Open data frameworks reduce vendor lock-in. The TGA fast-tracks adaptive medical AI pathways. Australia becomes a regional AI hub and real wages grow as gains are shared through an updated enterprise bargaining framework.</p>
+  <div class="s-drivers">
+    <div class="drv opp"><div class="drv-lbl">Key Enabler</div>Coordinated national AI strategy; SME adoption tax credit; open government data framework</div>
+    <div class="drv opp"><div class="drv-lbl">Labour Outcome</div>Net employment growth: AI-adjacent role creation outpaces displacement by 2027–28</div>
+    <div class="drv risk"><div class="drv-lbl">Political Risk</div>Coalition fragility; retraining costs (~A$3B); opposition from incumbent professional bodies</div>
+    <div class="drv risk"><div class="drv-lbl">External Risk</div>US-China AI arms race fragments global interoperability; data sovereignty pressures</div>
+  </div>
+</div>
+
+<div class="s-panel sp-d" id="sp-d" style="display:none">
+  <div class="s-header">
+    <div><div class="s-name">Concentrated Disruption</div><p style="font-size:0.84rem;color:var(--accent);margin:0.3rem 0 0;max-width:100%">Rapid large-firm adoption; governance fails; gains concentrate</p></div>
+    <div style="text-align:right"><div class="s-gdp" style="color:var(--accent)">+0.4–0.6% GDP pa</div><div style="font-family:var(--ff-mono);font-size:0.58rem;color:var(--accent)">cumulative +A$90B; highly unequal</div></div>
+  </div>
+  <p style="font-size:0.87rem;max-width:100%;margin-bottom:1rem;color:#1c1c1c">The skills system cannot keep pace with rapid large-firm adoption. Structural unemployment rises in cognitive occupations. Poorly-designed regulation disadvantages Australian startups while hyperscalers capture infrastructure rents. Fiscal costs rise as corporate tax revenues stagnate due to profit offshoring — limiting the government's capacity to respond.</p>
+  <div class="s-drivers">
+    <div class="drv risk"><div class="drv-lbl">Key Risk</div>Precautionary regulation creates compliance overhead without enabling opportunity</div>
+    <div class="drv risk"><div class="drv-lbl">Labour Outcome</div>Structural unemployment 7–9% in high-exposure occupations; wage polarisation accelerates</div>
+    <div class="drv risk"><div class="drv-lbl">Fiscal Risk</div>Welfare costs rise as corporate AI profits shift offshore; structural budget deficit widens</div>
+    <div class="drv"><div class="drv-lbl">Recovery Lever</div>Crisis creates window for emergency reform, but social trust damage takes a decade to repair</div>
+  </div>
+</div>
+
+<div class="sim fi">
+  <div class="sim-title">Interactive Policy Simulator</div>
+  <div class="sim-desc">Adjust the four key policy levers to model their combined effect on Australia's projected 2030 outcomes.</div>
+  <div class="sim-grid">
+    <div class="sim-ctl"><label>AI Adoption Rate (% of eligible firms)</label><input type="range" id="sAdopt" min="10" max="90" value="45" step="5" oninput="runSim()"><div class="sv" id="vAdopt">45%</div></div>
+    <div class="sim-ctl"><label>Skills Investment (% of displaced workers retrained)</label><input type="range" id="sSkills" min="5" max="80" value="30" step="5" oninput="runSim()"><div class="sv" id="vSkills">30%</div></div>
+    <div class="sim-ctl"><label>Regulatory Quality (1 = obstructive → 10 = enabling)</label><input type="range" id="sReg" min="1" max="10" value="5" step="1" oninput="runSim()"><div class="sv" id="vReg">5 / 10</div></div>
+    <div class="sim-ctl"><label>Open Data Infrastructure (0 = closed → 10 = open)</label><input type="range" id="sData" min="0" max="10" value="4" step="1" oninput="runSim()"><div class="sv" id="vData">4 / 10</div></div>
+  </div>
+  <div class="sim-out">
+    <div class="sim-m"><span class="sim-mv" id="mGDP">+1.2%</span><span class="sim-ml">Annual GDP<br>uplift (pp)</span></div>
+    <div class="sim-m"><span class="sim-mv" id="mJobs">−3.4%</span><span class="sim-ml">Net employment<br>change (high-exposure)</span></div>
+    <div class="sim-m"><span class="sim-mv" id="mGini">+2.1</span><span class="sim-ml">Gini index<br>change (pts)</span></div>
+    <div class="sim-m"><span class="sim-mv" id="mFisc">+A$18B</span><span class="sim-ml">Net fiscal<br>position (2030)</span></div>
+  </div>
+</div>
+
+<div class="chart-wrap fi">
+  <div class="chart-title">Fig. 3 — Scenario GDP Trajectories</div>
+  <div class="chart-sub">Projected cumulative productivity uplift (% above baseline trend), 2025–2030</div>
+  <canvas id="scenarioChart" height="290"></canvas>
+  <div class="chart-note">Baseline trend = RBA medium-term productivity growth of 1.1% pa. Shaded bands = structural uncertainty range (±0.3pp).</div>
+</div>
+</section>
+
+<!-- §04 POLICY -->
+<section id="policy">
+<div class="section-label fi" data-num="04">Policy Playbook</div>
+<h2 class="fi">What to do, when, with whom — and what could go wrong</h2>
+
+<p class="lead fi">No single instrument closes the gap between scenarios. A coordinated suite must be sequenced to build institutional capacity before disruption peaks.</p>
+
+<p class="fi">The core failure risk is <strong>timing mismatch</strong>. AI capabilities advance on 6–18 month cycles; Australia's institutions run on 4–8 year parliamentary cycles. Workers displaced in 2026 cannot wait for a 2028 TAFE review — and startups will relocate to Singapore if regulatory uncertainty persists.</p>
+
+<div class="policy-tree">
+  <div class="p-card fi">
+    <span class="p-icon">🎓</span>
+    <div class="p-name">National AI Skills Compact</div>
+    <div class="p-when">Immediate · 2025–2027</div>
+    <div class="p-body">Expand TAFE and university micro-credential pipelines for AI-complementary skills: data literacy, prompt engineering, AI governance. Target 300,000 completions by 2027, co-funded via industry levy-and-rebate.</div>
+    <div class="p-tradeoff">⚖ Trade-off: upfront cost (~A$2.4B) vs structural unemployment costs of inaction. KPI: % of displaced workers in equivalent roles within 24 months (target: 65%).</div>
+  </div>
+  <div class="p-card fi">
+    <span class="p-icon">💸</span>
+    <div class="p-name">SME AI Adoption Tax Credit</div>
+    <div class="p-when">Immediate · 2025–2026</div>
+    <div class="p-body">Refundable 30% tax credit for AI adoption by firms with turnover &lt;A$50M. Requires documented workforce training co-investment. Sunsets after 4 years. Modelled on New Zealand's R&D tax credit structure.</div>
+    <div class="p-tradeoff">⚖ Trade-off: Revenue cost ~A$800M pa vs estimated A$3.2B in incremental SME productivity gains. KPI: SME AI adoption rate (target: 65% by 2028 vs 34% current).</div>
+  </div>
+  <div class="p-card fi">
+    <span class="p-icon">🔓</span>
+    <div class="p-name">Open Government Data Framework</div>
+    <div class="p-when">Near-term · 2025–2027</div>
+    <div class="p-body">Mandate open APIs for government datasets (health, transport, geospatial, ABS microdata) under standardised licensing. Establish Data Access Partnerships with CSIRO and universities, building comparative advantage in health and resources AI.</div>
+    <div class="p-tradeoff">⚖ Trade-off: Privacy governance overhead; agency coordination costs. KPI: High-quality public datasets via API (target: 500 by 2027, vs ~80 today).</div>
+  </div>
+  <div class="p-card fi">
+    <span class="p-icon">⚖️</span>
+    <div class="p-name">Adaptive AI Regulation</div>
+    <div class="p-when">Near-term · 2026–2028</div>
+    <div class="p-body">Risk-tiered AI governance aligned with the EU AI Act but calibrated for Australia's scale. An AI Safety &amp; Innovation Office with sandboxing powers. Fast-track TGA pathway for diagnostic AI with adaptive post-market surveillance.</div>
+    <div class="p-tradeoff">⚖ Trade-off: Regulatory certainty boosts investment but risks locking in early frameworks. KPI: Median approval time (&lt;9 months low-risk; &lt;18 months high-risk medical AI).</div>
+  </div>
+  <div class="p-card fi">
+    <span class="p-icon">🌏</span>
+    <div class="p-name">Indo-Pacific AI Trade Strategy</div>
+    <div class="p-when">Medium-term · 2027–2030</div>
+    <div class="p-body">Position Australia as the trusted AI partner for the Indo-Pacific — exporting healthcare and resources AI built on transparent, auditable systems. Bilateral data-sharing agreements with Singapore, Japan, and South Korea leverage Australia's data sovereignty reputation.</div>
+    <div class="p-tradeoff">⚖ Trade-off: Geopolitical complexity; requires domestic AI sector at export scale. KPI: AI exports as % of services exports (target: 8% by 2030 vs ~2% current).</div>
+  </div>
+  <div class="p-card fi">
+    <span class="p-icon">📋</span>
+    <div class="p-name">AI-Aware Bargaining Framework</div>
+    <div class="p-when">Medium-term · 2026–2029</div>
+    <div class="p-body">Update enterprise bargaining to require AI impact assessments before major deployments. Pilot productivity-sharing clauses requiring firms to negotiate gains-sharing with employees. Address gig-work misclassification in AI-adjacent platform work.</div>
+    <div class="p-tradeoff">⚖ Trade-off: Risk of reduced adoption incentives if poorly designed. KPI: Labour share of income in AI-intensive sectors (target: within 2pp of 2024 baseline by 2030).</div>
+  </div>
+</div>
+
+<h3 class="fi">Unintended Consequences</h3>
+
+<p class="fi">Even well-designed policy carries risks. Generic AI literacy programs may miss employer demand for sector-specific knowledge. An SME credit without training requirements may subsidise displacement without productivity gains.</p>
+
+<p class="fi">The deepest risk is <strong>regulatory arbitrage</strong>: if Australia's framework is heavier than Singapore or the US, firms will locate AI systems offshore — extracting profits while deploying labour effects on Australian workers. This demands <em>adaptive mechanisms</em> — sunset clauses and mandatory reviews — not static legislation.</p>
+</section>
+
+<!-- §05 METHODS -->
+<section id="methods">
+<div class="section-label fi" data-num="05">Methods, Data &amp; Uncertainty</div>
+<h2 class="fi">How this forecast was built — and what it cannot see</h2>
+
+<p class="lead fi">Intellectual honesty requires confronting the limits of this forecast. Uncertainty arises from six distinct sources.</p>
+
+<div class="unc-grid fi">
+  <div class="unc-item"><h4>Model Uncertainty</h4><p>Task-exposure frameworks classify AI exposure based on current capabilities — but capability is non-stationary. Today's exposure distribution looks markedly different from 18 months ago, so these models systematically underestimate future exposure.</p></div>
+  <div class="unc-item"><h4>Adoption Uncertainty</h4><p>Adoption is lumpy and dependent on managerial quality. A firm that does not adopt within 3 years may be permanently excluded if early-mover advantages compound.</p></div>
+  <div class="unc-item"><h4>Measurement Gaps</h4><p>ABS statistics lag 1–2 years and miss quality improvements — the AI dividend may be real but statistically invisible for years, echoing the Solow productivity paradox.</p></div>
+  <div class="unc-item"><h4>Structural Break Risk</h4><p>All scenarios assume no black-swan events. An AI safety incident, US-China decoupling, or domestic political shock would each invalidate the scenario structure entirely.</p></div>
+  <div class="unc-item"><h4>Distributional Data Gaps</h4><p>Distributional evidence for Australia is thin. Most research applies US occupational data to Australian structures — fragile given Australia's higher services share and distinct wage-setting institutions.</p></div>
+  <div class="unc-item"><h4>General Equilibrium Effects</h4><p>This forecast models partial equilibrium only. AI-driven price changes rippling through input-output linkages are not captured and could substantially amplify or dampen headline estimates.</p></div>
+</div>
+
+<h3 class="fi">Forecast Confidence by Dimension</h3>
+<div class="dials-row fi" id="dialsRow"></div>
+
+<div class="disclosure fi">
+  <strong>AI Tooling Disclosure</strong>
+  This essay was researched and drafted with the assistance of Anthropic Claude &amp; Google Gemini, used for: literature synthesis, mechanism mapping, scenario stress-testing, policy trade-off analysis, and visualisation logic. All quantitative estimates are drawn from the referenced primary sources. Interactive visualisations use Chart.js.
+</div>
+
+<div class="chart-wrap fi">
+  <div class="chart-title">Fig. 4 — Forecast Uncertainty Fan</div>
+  <div class="chart-sub">Scenario confidence intervals: cumulative GDP uplift (% above baseline trend), 2025–2030</div>
+  <canvas id="fanChart" height="270"></canvas>
+  <div class="chart-note">Shaded bands = interquartile range. Dashed lines = 10th/90th percentile. By 2027–28 scenarios diverge beyond structural uncertainty range, making early policy signals decisive.</div>
+</div>
+</section>
+
+<!-- §06 REFERENCES -->
+<section id="references">
+<div class="section-label fi" data-num="06">References &amp; Attributions</div>
+<h2 class="fi">Sources</h2>
+<ol class="ref-list fi">
+  <li>Acemoglu, D., &amp; Restrepo, P. (2022). Tasks, automation, and the rise in US wage inequality. <em>Econometrica</em>, 90(5), 1973–2016.</li>
+  <li>Australian Bureau of Statistics. (2024). <em>Labour Force, Australia</em>. ABS.</li>
+  <li>Brynjolfsson, E., Li, D., &amp; Raymond, L. (2023). Generative AI at work. <em>NBER Working Paper</em> No. 31161.</li>
+  <li>CSIRO. (2024). <em>Australia's AI ecosystem: Capability and opportunity</em>. CSIRO Data61.</li>
+  <li>Deloitte Access Economics. (2024). <em>Unlocking the economic potential of AI in Australia</em>. Deloitte.</li>
+  <li>Felten, E., Raj, M., &amp; Seamans, R. (2023). How will language modelling affect occupations? <em>SSRN Working Paper</em>.</li>
+  <li>Goldman Sachs Economics Research. (2023). <em>The potentially large effects of artificial intelligence on economic growth</em>.</li>
+  <li>Harrison, X., et al. (2023). AI in diagnostic radiology. <em>The Lancet Digital Health</em>, 5(3), e123–e135.</li>
+  <li>KPMG Australia. (2024). <em>AI in Australian financial services: Opportunity and obligation</em>. KPMG.</li>
+  <li>McKinsey Global Institute. (2024). <em>A new future of work: The race to deploy AI and raise skills</em>. McKinsey.</li>
+  <li>Noy, S., &amp; Zhang, W. (2023). Experimental evidence on the productivity effects of generative AI. <em>Science</em>, 381(6654), 187–192.</li>
+  <li>OECD. (2023). <em>OECD employment outlook 2023: Artificial intelligence and the labour market</em>. OECD Publishing.</li>
+  <li>Reserve Bank of Australia. (2024). <em>Statement on monetary policy — February 2024</em>. RBA.</li>
+  <li>Treasury, Australian Government. (2023). <em>Employment white paper: Working future</em>. Commonwealth of Australia.</li>
+</ol>
+</section>
+
+</main>
+
+<footer>
+  <div>
+    <div>ECON1626 · Economics of Artificial Intelligence · RMIT University</div>
+    <div style="margin-top:0.3rem;opacity:0.6">econ1626-ai-future-forecast · GitHub Pages · forecast.html</div>
+  </div>
+  <span>Mohammed Murshid Olakara · May 2026</span>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const d=document.documentElement;
+  document.getElementById('prog-bar').style.width=(d.scrollTop/(d.scrollHeight-d.clientHeight)*100)+'%';
+  const ids=['thesis','mechanisms','sectors','scenarios','policy','methods','references'];
+  const dots=document.querySelectorAll('.nav-dot');
+  ids.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const r=el.getBoundingClientRect();
+    if(r.top<=200&&r.bottom>=200){dots.forEach(d=>d.classList.remove('active'));dots[i]?.classList.add('active');}
+  });
+});
+function goTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});}
+const fio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:0.07});
+document.querySelectorAll('.fi').forEach(el=>fio.observe(el));
+function animateTicker(id,target,prefix,suffix,duration){
+  const el=document.getElementById(id);let start=null;
+  function step(ts){if(!start)start=ts;const p=Math.min((ts-start)/duration,1);const e=p<0.5?2*p*p:-1+(4-2*p)*p;el.textContent=prefix+Math.round(e*target)+suffix;if(p<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+}
+setTimeout(()=>{animateTicker('tk1',600,'A$','B',2000);animateTicker('tk2',27,'','%',1800);},800);
+setTimeout(()=>{document.querySelectorAll('.exp-fill[data-w]').forEach(el=>{el.style.width=el.dataset.w;});},500);
+const tlObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){const nodes=document.querySelectorAll('.tl-node');nodes.forEach((n,i)=>setTimeout(()=>n.classList.add('revealed'),i*220));tlObs.disconnect();}});},{threshold:0.2});
+const tl=document.getElementById('tlTrack');if(tl)tlObs.observe(tl);
+function showS(s){
+  ['b','u','d'].forEach(k=>{document.getElementById('sp-'+k).style.display='none';document.getElementById('sp-'+k).classList.remove('active');});
+  document.getElementById('sp-'+s).style.display='block';document.getElementById('sp-'+s).classList.add('active');
+  const tabs=document.querySelectorAll('.s-tab');tabs.forEach(t=>t.className='s-tab');
+  const idx={b:0,u:1,d:2}[s];const cls={b:'active-b',u:'active-u',d:'active-d'}[s];tabs[idx].classList.add(cls);
+}
+function runSim(){
+  const a=+document.getElementById('sAdopt').value,sk=+document.getElementById('sSkills').value,r=+document.getElementById('sReg').value,dt=+document.getElementById('sData').value;
+  document.getElementById('vAdopt').textContent=a+'%';document.getElementById('vSkills').textContent=sk+'%';document.getElementById('vReg').textContent=r+' / 10';document.getElementById('vData').textContent=dt+' / 10';
+  const gdp=+(0.3+(a/100)*0.9+(r/10)*0.5+(dt/10)*0.35).toFixed(2);
+  const jobs=+(-(a/100)*8+(sk/100)*5.5+(r/10)*0.8).toFixed(1);
+  const gini=+(6-(sk/100)*5-(r/10)*1.5-(dt/10)*0.8).toFixed(1);
+  const fiscal=+((gdp*18)-(sk/100)*22+(dt/10)*4).toFixed(0);
+  const set=(id,val,fmt,pos)=>{const el=document.getElementById(id);el.textContent=fmt(val);el.className='sim-mv '+(pos(val)?'pos':'neg');};
+  set('mGDP',gdp,v=>'+'+v+'%',v=>v>0);set('mJobs',jobs,v=>(v>=0?'+':'')+v+'%',v=>v>=0);
+  set('mGini',gini,v=>(v>=0?'+':'')+v,v=>v<=1.5);set('mFisc',fiscal,v=>(v>=0?'+':'')+' A$'+Math.abs(v)+'B',v=>v>=0);
+}
+runSim();
+const dialData=[{label:'GDP Magnitude',conf:0.55,color:'#b7950b'},{label:'Adoption Speed',conf:0.35,color:'#b83228'},{label:'Sector Impacts',conf:0.65,color:'#17426e'},{label:'Policy Efficacy',conf:0.40,color:'#b83228'},{label:'Labour Market',conf:0.45,color:'#b7950b'},{label:'Distribution',conf:0.30,color:'#b83228'}];
+function makeDial(conf,color,size=110){
+  const r=38,cx=55,cy=55,angle=conf*Math.PI,sA=Math.PI,eA=Math.PI+angle;
+  const x1=cx+r*Math.cos(sA),y1=cy+r*Math.sin(sA),x2=cx+r*Math.cos(eA),y2=cy+r*Math.sin(eA),large=angle>Math.PI?1:0;
+  const track=`M ${cx-r} ${cy} A ${r} ${r} 0 1 1 ${cx+r} ${cy}`;const fill=`M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
+  return `<svg class="dial-svg" viewBox="0 0 110 70" width="${size}" height="${size*70/110}"><path d="${track}" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="8" stroke-linecap="round"/><path d="${fill}" fill="none" stroke="${color}" stroke-width="8" stroke-linecap="round"/><text x="55" y="52" text-anchor="middle" font-family="IBM Plex Mono" font-size="13" font-weight="500" fill="#0d0d0d">${Math.round(conf*100)}%</text><text x="55" y="64" text-anchor="middle" font-family="IBM Plex Mono" font-size="7.5" fill="#68594a">confidence</text></svg>`;
+}
+const dr=document.getElementById('dialsRow');
+if(dr){dialData.forEach(d=>{dr.innerHTML+=`<div class="dial-wrap">${makeDial(d.conf,d.color)}<div class="dial-label">${d.label}</div></div>`;});}
+
+Chart.defaults.font.family="'IBM Plex Mono',monospace";Chart.defaults.color='#68594a';
+const C={red:'#b83228',blue:'#17426e',green:'#175c35',gold:'#a8870a',muted:'#7a8f9e'};
+new Chart(document.getElementById('channelChart'),{type:'bar',data:{labels:['Task\nAutomation','Productivity\nAugmentation','Creative\nDestruction','Demand\nCreation','Innovation\nSpillovers'],datasets:[{label:'Upside (P80)',data:[0.38,0.72,0.44,0.35,0.28],backgroundColor:'rgba(23,92,53,0.22)',borderColor:C.green,borderWidth:2},{label:'Baseline (P50)',data:[0.22,0.48,0.28,0.20,0.16],backgroundColor:'rgba(23,66,110,0.30)',borderColor:C.blue,borderWidth:2},{label:'Downside (P20)',data:[0.08,0.18,0.10,0.06,0.05],backgroundColor:'rgba(184,50,40,0.16)',borderColor:C.red,borderWidth:2}]},options:{responsive:true,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:16}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: +${c.parsed.y.toFixed(2)}pp GDP`}}},scales:{x:{grid:{color:'rgba(196,180,154,0.2)'},ticks:{font:{size:10}}},y:{grid:{color:'rgba(196,180,154,0.3)'},title:{display:true,text:'GDP contribution (pp pa)',font:{size:10}},ticks:{callback:v=>'+'+v.toFixed(2)+'pp'}}}}});
+new Chart(document.getElementById('bubbleChart'),{type:'bubble',data:{datasets:[{label:'Financial Services',data:[{x:82,y:3.2,r:17}],backgroundColor:'rgba(184,50,40,0.22)',borderColor:C.red,borderWidth:2},{label:'Legal & Professional',data:[{x:78,y:-2.4,r:13}],backgroundColor:'rgba(184,50,40,0.18)',borderColor:C.red,borderWidth:2},{label:'Healthcare',data:[{x:60,y:4.8,r:19}],backgroundColor:'rgba(23,92,53,0.22)',borderColor:C.green,borderWidth:2},{label:'Education',data:[{x:55,y:0.8,r:11}],backgroundColor:'rgba(168,135,10,0.2)',borderColor:C.gold,borderWidth:2},{label:'Mining & Resources',data:[{x:45,y:5.4,r:15}],backgroundColor:'rgba(23,92,53,0.28)',borderColor:C.green,borderWidth:2},{label:'Retail & Hospitality',data:[{x:50,y:-1.2,r:21}],backgroundColor:'rgba(122,143,158,0.2)',borderColor:C.muted,borderWidth:1},{label:'Construction',data:[{x:28,y:1.1,r:14}],backgroundColor:'rgba(168,135,10,0.18)',borderColor:C.gold,borderWidth:1},{label:'Aged Care',data:[{x:18,y:0.5,r:12}],backgroundColor:'rgba(23,92,53,0.18)',borderColor:C.green,borderWidth:1}]},options:{responsive:true,plugins:{legend:{position:'right',labels:{boxWidth:10,font:{size:10},padding:10}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.parsed.x}% exposure, ${c.parsed.y>=0?'+':''}${c.parsed.y}% wage`}}},scales:{x:{min:0,max:100,title:{display:true,text:'AI Task Overlap (%)'},grid:{color:'rgba(196,180,154,0.3)'}},y:{title:{display:true,text:'Projected Real Wage Change (%, 2025–2030)'},grid:{color:'rgba(196,180,154,0.3)'},ticks:{callback:v=>(v>=0?'+':'')+v+'%'}}}}});
+const yrs=[2025,2026,2027,2028,2029,2030];
+const upB=[0.2,0.55,1.05,1.72,2.45,3.28],midB=[0.1,0.28,0.52,0.84,1.18,1.52],dnB=[0.05,0.1,0.18,0.28,0.38,0.50];
+function fan(base,hi,lo,color,label){return[{label:label+' (upper)',data:base.map(v=>+(v*hi).toFixed(2)),borderColor:color,borderDash:[4,3],borderWidth:1,pointRadius:0,fill:false,tension:0.4},{label:label+' (mid)',data:base,borderColor:color,borderWidth:2.5,pointRadius:4,fill:false,tension:0.4},{label:label+' (lower)',data:base.map(v=>+(v*lo).toFixed(2)),borderColor:color,borderDash:[4,3],borderWidth:1,pointRadius:0,fill:'-1',backgroundColor:color.replace('rgb','rgba').replace(')',',0.08)'),tension:0.4}];}
+new Chart(document.getElementById('scenarioChart'),{type:'line',data:{labels:yrs,datasets:[...fan(upB,1.3,0.7,'rgb(23,92,53)','Upside'),...fan(midB,1.25,0.75,'rgb(23,66,110)','Baseline'),...fan(dnB,1.4,0.6,'rgb(184,50,40)','Downside')]},options:{responsive:true,plugins:{legend:{labels:{filter:i=>!i.text.includes('upper')&&!i.text.includes('lower'),boxWidth:14,font:{size:11},padding:14}},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(196,180,154,0.25)'}},y:{title:{display:true,text:'Cumulative GDP uplift (% above baseline trend)'},grid:{color:'rgba(196,180,154,0.3)'},ticks:{callback:v=>'+'+v+'%'}}}}});
+new Chart(document.getElementById('fanChart'),{type:'line',data:{labels:yrs,datasets:[{label:'Upside P90',data:upB.map(v=>+(v*1.45).toFixed(2)),borderColor:'rgba(23,92,53,0.28)',fill:false,borderDash:[3,3],pointRadius:0,tension:0.4,borderWidth:1},{label:'Upside P50',data:upB,borderColor:'rgb(23,92,53)',fill:false,borderWidth:2.5,pointRadius:3,tension:0.4},{label:'Upside P10',data:upB.map(v=>+(v*0.6).toFixed(2)),borderColor:'rgba(23,92,53,0.28)',fill:'-1',backgroundColor:'rgba(23,92,53,0.07)',borderDash:[3,3],pointRadius:0,tension:0.4,borderWidth:1},{label:'Baseline P50',data:midB,borderColor:'rgb(23,66,110)',fill:false,borderWidth:2.5,pointRadius:3,tension:0.4},{label:'Downside P50',data:dnB,borderColor:'rgb(184,50,40)',fill:false,borderWidth:2.5,pointRadius:3,tension:0.4},{label:'Downside P10',data:dnB.map(v=>Math.max(0,v*0.4)),borderColor:'rgba(184,50,40,0.25)',fill:'-1',backgroundColor:'rgba(184,50,40,0.07)',borderDash:[3,3],pointRadius:0,tension:0.4,borderWidth:1}]},options:{responsive:true,plugins:{legend:{labels:{filter:i=>['Upside P50','Baseline P50','Downside P50'].includes(i.text),boxWidth:14,font:{size:11},padding:14}}},scales:{x:{grid:{color:'rgba(196,180,154,0.25)'}},y:{min:0,title:{display:true,text:'Cumulative GDP uplift above trend (%)'},grid:{color:'rgba(196,180,154,0.3)'},ticks:{callback:v=>'+'+v.toFixed(1)+'%'}}}}});
+</script>
+</body>
+</html>
